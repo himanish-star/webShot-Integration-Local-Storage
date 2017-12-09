@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.js"
+            integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+            crossorigin="anonymous">
+
+    </script>
+</head>
+<body>
+<img id="bannerImg" src="/use"><!--using demo model-->
+<img id="tableBanner" style="height: 40vh;width: 40vw"><!--image retrieved from local storage-->
+<script>
+    $(()=>{
+        //basically the below model is to check
+        //for comparison between CANVAS generated URI
+        //and webshot generated URI
+        $.get('/storeImageToLocalStorage',(specificData)=>{
+            localStorage.setItem('specificData',specificData);
+        });
+        bannerImage = document.getElementById('bannerImg');
+        imgData = getBase64Image(bannerImage);
+        localStorage.setItem("imgData", imgData);
+        function getBase64Image(img) {
+            var canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+
+            var dataURL = canvas.toDataURL("image/png");
+            console.log(dataURL);
+            return dataURL;
+        }
+        var dataImage = localStorage.getItem('imgData');
+        bannerImg = document.getElementById('tableBanner');
+        bannerImg.src = 'data:image/png;base64,'+localStorage.getItem('specificData');
+//        bannerImg.src = localStorage.getItem('imgData');
+        console.log('data:image/png;base64,'+localStorage.getItem('specificData')===dataImage);
+        //this returns false as half part is compared
+    });
+</script>
+</body>
+</html>
