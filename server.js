@@ -4,7 +4,7 @@ const app = express();
 
 
 let webshot = require('webshot');
-let specificData;
+let specificData="";
 
 app.get('/',(req,res)=>{
     res.send("let's get started");
@@ -17,7 +17,10 @@ app.get('/imageViewer',(req,res)=>{
 app.get('/storeImageToLocalStorage',(req,res,next)=>{
     let renderStream = webshot('stackoverflow.com');
     renderStream.on('data', function(data) {
-        specificData=data.toString('base64');
+        specificData += data.toString('base64');
+    });
+
+    renderStream.on('end', function() {
         next();
     });
 },(req,res)=>{
